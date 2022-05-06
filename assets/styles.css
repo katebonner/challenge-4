@@ -16,3 +16,7 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+
+.correct-answer {
+    display: none;
+}

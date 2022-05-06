@@ -1,5 +1,6 @@
 var score = 0;
 var oneSecond = 1000;
+
 var timerEl = document.getElementById("countdown");
 
 var questionSlide = document.getElementById("questionSlide");
@@ -54,56 +55,70 @@ var question5 = {
 var questions = [question1, question2, question3, question4, question5];
 
 // PRESENT QUESTIONS
-function questionOne() {
-        // QUESTION ELEMENT
-        var questionEl = document.createElement("div");
-        questionEl.className = "question-element";
+function presentQuestions(qIndex) {
 
-        // QUESTION PROMPT
-        var questionPrompt = document.createElement("h2");
-        questionPrompt.textContent = questions[0].prompt;
-        questionPrompt.className = "question-prompt"
-        questionEl.appendChild(questionPrompt);
+    console.log(qIndex);
+    // QUESTION ELEMENT
+    var questionEl = document.createElement("div");
+    questionEl.className = "question-element";
 
-        // SELECTION A BUTTON
-        var selectionA = document.createElement("button");
-        selectionA.textContent = questions[0].a;
-        selectionA.className = "button";
-        questionEl.appendChild(selectionA);
+    // QUESTION PROMPT
+    var questionPrompt = document.createElement("h2");
+    questionPrompt.textContent = questions[qIndex].prompt;
+    questionPrompt.className = "question-prompt"
+    questionEl.appendChild(questionPrompt);
 
-        // SELECTION B BUTTON
-        var selectionB = document.createElement("button");
-        selectionB.textContent = questions[0].b;
-        selectionB.className = "button";
-        questionEl.appendChild(selectionB);
+    // SELECTION A BUTTON
+    var selectionA = document.createElement("button");
+    selectionA.textContent = questions[qIndex].a;
+    selectionA.className = "button";
+    questionEl.appendChild(selectionA);
 
-        // SELECTION C BUTTON
-        var selectionC = document.createElement("button");
-        selectionC.textContent = questions[0].c;
-        selectionC.className = "button";
-        questionEl.appendChild(selectionC);
+    // SELECTION B BUTTON
+    var selectionB = document.createElement("button");
+    selectionB.textContent = questions[qIndex].b;
+    selectionB.className = "button";
+    questionEl.appendChild(selectionB);
 
-        // SELECTION D BUTTON
-        var selectionD = document.createElement("button");
-        selectionD.textContent = questions[0].d;  
-        selectionD.className = "button";  
-        questionEl.appendChild(selectionD); 
+    // SELECTION C BUTTON
+    var selectionC = document.createElement("button");
+    selectionC.textContent = questions[qIndex].c;
+    selectionC.className = "button";
+    questionEl.appendChild(selectionC);
 
-        // APPEND TO HTML LINKED SECTION
-        questionSlide.appendChild(questionEl);
+    // SELECTION D BUTTON
+    var selectionD = document.createElement("button");
+    selectionD.textContent = questions[qIndex].d;  
+    selectionD.className = "button";  
+    questionEl.appendChild(selectionD); 
 
-        // LISTEN FOR CLICK
-        questionEl.addEventListener("click", responseHandlerOne);
+    // ANSWER
+    var correctAnswer = document.createElement("div");
+    correctAnswer.textContent = questions[qIndex].answer;
+    correctAnswer.className = "correct-answer";
+    correctAnswer.setAttribute("data-correct", questions[qIndex].answer);
+    questionEl.appendChild(correctAnswer);
+
+    // APPEND TO HTML LINKED SECTION
+    questionSlide.appendChild(questionEl);
+
+    // LISTEN FOR CLICK
+    questionEl.addEventListener("click", responseHandler);
+    console.log(questionSlide);
 }
+
 // RESPONSE HANDELER
-var responseHandlerOne = function(event) {
+var responseHandler = function(event) {
     var response = event.target.textContent;
-    if (response === questions[0].answer){
+    var correctAnswerEl = $(".correct-answer").attr("data-correct");
+    console.log(correctAnswerEl);
+    if (response === correctAnswerEl){
         score++;
-        return 0;
+        console.log(score);
+        return true;
     }
     else {
-        return 0;
+        return false;
     }
 }
 
@@ -121,7 +136,8 @@ function countdown() {
 }
 
 countdown();
-questionOne();
+presentQuestions(0);
+console.log(responseHandler);
 
 
 
