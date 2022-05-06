@@ -1,0 +1,18 @@
+* {
+    font-family: Avenir, sans-serif;
+    background-color: rgb(17, 17, 17);
+}
+
+#countdown {
+    color:rgb(118, 23, 206);
+    font-size: 7em;
+    font-weight: 100;
+    margin: 1%;
+    padding: 1%;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
