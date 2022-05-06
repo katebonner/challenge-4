@@ -93,18 +93,22 @@ function questionOne() {
         questionSlide.appendChild(questionEl);
 
         // LISTEN FOR CLICK
-        questionEl.addEventListener("click", responseHandler);
+        questionEl.addEventListener("click", responseHandlerOne);
 }
 // RESPONSE HANDELER
 var responseHandlerOne = function(event) {
     var response = event.target.textContent;
     if (response === questions[0].answer){
         score++;
+        return 0;
+    }
+    else {
+        return 0;
     }
 }
 
 
-
+//COUNTDOWN
 function countdown() {
     var totalSeconds = 60;
     var timeInterval = setInterval( function() {
@@ -118,5 +122,6 @@ function countdown() {
 
 countdown();
 questionOne();
+
 
 
