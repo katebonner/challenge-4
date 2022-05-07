@@ -1,6 +1,7 @@
 * {
     font-family: Avenir, sans-serif;
-    background-color: rgb(17, 17, 17);
+    /*background-color: rgb(17, 17, 17);*/
+
 }
 
 #countdown {
@@ -18,5 +19,9 @@
 }
 
 .correct-answer {
+    display: none;
+}
+
+.user-element {
     display: none;
 }

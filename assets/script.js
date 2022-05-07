@@ -1,18 +1,19 @@
 var score = 0;
 var oneSecond = 1000;
+var counter = 0
 
-var timerEl = document.getElementById("countdown");
-
+var userInputPrompt = document.getElementById("username-request-element")
 var questionSlide = document.getElementById("questionSlide");
+var scoreBoardSlide = document.getElementById("score-board-slide");
 
 // QUESTION OBJECTS
 var question1 = {
     prompt: "in which html tag do we put the javascript ?",
     a: "<javascript>",
     b: "<java>",
-    c: "<script>",
-    d: "<js>",
-    answer: "<script>"
+    c: "<scripts>",
+    d: "none of the above",
+    answer: "none of the above"
 }
 
 var question2 = {
@@ -54,10 +55,55 @@ var question5 = {
 // LIST OF QUESTION OBJECTS
 var questions = [question1, question2, question3, question4, question5];
 
+// LIST OF USER OBJECTS
+var users = [];
+
+// SUBMIT USERNAME
+var submitUsername = function(event) {
+    event.preventDefault();
+    var usernameInput = document.querySelector("input[name='user-name']").value;
+
+    //CHECK IF INPUTS ARE EMPTY (VALIDATE)
+    if (!usernameInput) {
+        alert("please enter a username")
+        return false;
+    }
+
+    //CREATE NEW USER OBJECT
+    var userDataObj = {
+        name: usernameInput,
+        score: 0,
+    }
+
+    createUserEl(userDataObj);
+    countdown();
+    presentQuestions(counter);
+}
+
+
+//COUNTDOWN
+function countdown() {
+    var totalSeconds = 60;
+    var timerEl = document.getElementById("countdown");
+    var timeInterval = setInterval( function() {
+        timerEl.textContent = totalSeconds;
+
+        if (totalSeconds > 0)
+            totalSeconds--;
+
+        if (totalSeconds < 0) {
+            clearInterval(timeInterval);
+            endQuiz()
+        }
+    }, oneSecond)
+}
+
+
+
 // PRESENT QUESTIONS
 function presentQuestions(qIndex) {
+    if (counter < questions.length) {
 
-    console.log(qIndex);
     // QUESTION ELEMENT
     var questionEl = document.createElement("div");
     questionEl.className = "question-element";
@@ -104,40 +150,105 @@ function presentQuestions(qIndex) {
 
     // LISTEN FOR CLICK
     questionEl.addEventListener("click", responseHandler);
-    console.log(questionSlide);
+
+    }
+    else {
+        endQuiz();
+    }
 }
 
 // RESPONSE HANDELER
 var responseHandler = function(event) {
+    event.preventDefault();
     var response = event.target.textContent;
     var correctAnswerEl = $(".correct-answer").attr("data-correct");
-    console.log(correctAnswerEl);
-    if (response === correctAnswerEl){
+    if (response === correctAnswerEl) {
         score++;
-        console.log(score);
-        return true;
+        return score;
     }
     else {
-        return false;
+        // decrement totalSeconds in countdown()
+    }
+    counter++
+    presentQuestions(counter)
+}
+
+// CREATE USER ELEMENT
+var createUserEl = function(userDataObj){
+  
+    var userEl = document.createElement("div")
+    userEl.className = "user-element";
+    userEl.setAttribute("data-name", userDataObj.name);
+    userEl.setAttribute("data-score", userDataObj.score);
+    document.body.appendChild(userEl);
+}
+
+// END QUIZ
+var endQuiz = function() {
+    
+    var newUserObj = {
+        name: $(".user-element").attr("data-name"),
+        score: $(".user-element").attr("data-score"),
+    }
+
+    // IF FIRST USER DATA OBJECT
+    if (typeof(localStorage.getItem("users") === 'null')) {
+
+        // STORE THE FIRST USER DATA OBJECT LOCALLY
+        users.push(newUserObj);
+        localStorage.setItem("users", JSON.stringify(users));
+    
+    }
+
+    // IF NOT FIRST USER DATA OBJECT
+    if (localStorage.getItem("users")) {
+
+        //GET PREVIOUS USER DATA OBJECTS FROM LOCAL STORAGE
+        var usersStringArray = localStorage.getItem("users");
+        var usersFromLocalStorage = JSON.parse(usersStringArray);
+        
+        // STORE NEW DATA OBJECT 
+        usersFromLocalStorage.push(newUserObj);
+        localStorage.setItem("users", JSON.stringify(usersFromLocalStorage));
+
+        for (i = 0 ; i < usersFromLocalStorage.length ; i++){
+            // // CREATE SCORE BOARD DIV
+            // var scoreBoard = document.createElement("div");
+            // scoreBoard.className = "score-board";
+            // CREATE NAME LIST
+            var scoreBoardNames = document.createElement("ul");
+            scoreBoardNames.className = "score-board-names";
+            // CREAT SCORE LIST
+            var scoreBoardScores = document.createElement("ul");
+            scoreBoardScores.className = "score-board-scores";
+            // CREATE NAME LIST ELEMENT
+            var userFromStorage = document.createElement("li");
+            userFromStorage.textContent = usersFromLocalStorage[i].name;
+            userFromStorage.className = "score-board-name-element";
+            // CREATE SCORE LIST ELEMENT
+            var scoreFromStorage = document.createElement("li");
+            scoreFromStorage.textContent = usersFromLocalStorage[i].score; 
+            scoreFromStorage.className = "score-board-score-element"; 
+            // LINK ELEMENTS
+            scoreBoardNames.appendChild(userFromStorage); 
+            scoreBoardScores.appendChild(scoreFromStorage);
+            scoreBoardSlide.appendChild(scoreBoardNames);
+            scoreBoardSlide.appendChild(scoreBoardScores);
+        }
     }
 }
 
+// CALL FUNCTIONS
+document.addEventListener("submit", submitUsername);
 
-//COUNTDOWN
-function countdown() {
-    var totalSeconds = 60;
-    var timeInterval = setInterval( function() {
-        timerEl.textContent = totalSeconds;
-        totalSeconds--;
-        if (totalSeconds < 0) {
-            clearInterval(timeInterval);
-        }
-    }, oneSecond)
-}
 
-countdown();
-presentQuestions(0);
-console.log(responseHandler);
+
+
+
+
+
+
+
 
 
 
