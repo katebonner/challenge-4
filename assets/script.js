@@ -87,7 +87,7 @@ var submitUsername = function(event) {
 function countdown() {
     var timerEl = document.getElementById("countdown");
     var timeInterval = setInterval( function() {
-    timerEl.textContent = totalSeconds;
+    timerEl.textContent = totalSeconds- 1;
 
         if (totalSeconds > 0)
             totalSeconds--;
@@ -105,7 +105,7 @@ function countdown() {
 
 // PRESENT QUESTIONS
 function presentQuestions(counter) {
-    if (counter < questions.length) {
+    if ((counter < questions.length) && (totalSeconds >= 0)) {
 
     questionSlide.className = "question-slide-index";
 
