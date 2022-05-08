@@ -250,7 +250,6 @@ var endQuiz = function() {
         nameScoreContainer.appendChild(scoreBoardNames);
         nameScoreContainer.appendChild(scoreBoardScores);
         scoreBoardSlide.appendChild(nameScoreContainer);
-    
         return 0;   
     }
     
