@@ -235,14 +235,29 @@ var endQuiz = function() {
         //GET USER DATA OBJECTS FROM LOCAL STORAGE
         var usersStringArray = localStorage.getItem("users");
         var usersFromLocalStorage = JSON.parse(usersStringArray);
+
+        // CREATE NAME LIST ELEMENT
+        var userFromStorage = document.createElement("li");
+        userFromStorage.textContent = usersFromLocalStorage[0].name;
+        userFromStorage.className = "score-board-name-element";
+        // CREATE SCORE LIST ELEMENT
+        var scoreFromStorage = document.createElement("li");
+        scoreFromStorage.textContent = usersFromLocalStorage[0].score; 
+        scoreFromStorage.className = "score-board-score-element"; 
+        // LINK ELEMENTS
+        scoreBoardNames.appendChild(userFromStorage); 
+        scoreBoardScores.appendChild(scoreFromStorage);
+        nameScoreContainer.appendChild(scoreBoardNames);
+        nameScoreContainer.appendChild(scoreBoardScores);
+        scoreBoardSlide.appendChild(nameScoreContainer);
+    
         return 0;   
     }
-    
     
     // IF NOT FIRST USER DATA OBJECT
     if (localStorage.getItem("users") != 'null') {
     
-        //GET PREVIOUS USER DATA OBJECTS FROM LOCAL STORAGE
+        // //GET PREVIOUS USER DATA OBJECTS FROM LOCAL STORAGE
         var usersStringArray = localStorage.getItem("users");
         var usersFromLocalStorage = JSON.parse(usersStringArray);
         
