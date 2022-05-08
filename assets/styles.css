@@ -1,7 +1,70 @@
 * {
     font-family: Avenir, sans-serif;
-    /*background-color: rgb(17, 17, 17);*/
+    background-color: rgb(17, 17, 17);
+    color: rgb(255, 255, 255);
 
+}
+
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    font-size: 3em;
+    text-align: center;
+    letter-spacing: .2em;
+    font-weight: 100;
+}
+
+h2 {
+    font-size: 2em;
+    text-align: center;
+    letter-spacing: .2em;
+}
+
+h3 {
+    font-size: 1.8em;
+    text-align: center;
+    letter-spacing: .2em;
+    font-weight: 100;
+    color: rgb(118, 23, 206);
+}
+
+#input-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.btn {
+    border-radius: 25% / 50%;
+    border: none;
+    text-decoration: none;
+    background-color:rgb(118, 23, 206);
+    padding: 0;
+    font-size: 1.5em;
+    height: 50px;
+    width: 100px;
+    margin: 5% 0 5% 2.5%;
+
+}
+
+
+input {
+    border: .05em solid rgb(255, 255, 255);
+    border-radius: 10% / 20%;
+    background-color: rgb(17, 17, 17);
+    height: 100px;
+    width: 200px;
+    text-align: center;
+    font-size: 1.2em;
+    margin: 5% 2.5% 5% 0;
 }
 
 #countdown {
@@ -18,23 +81,56 @@
     justify-content: center;
 }
 
-.score-board-names,
-.score-board-names {
+.question-element {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
 }
 
+.button {
+    border-radius: 50% / 300%;
+    border: none;
+    text-decoration: none;
+    background-color:rgb(118, 23, 206);
+    padding: 0;
+    font-size: 1.2em;
+    height: 50px;
+    width: 300px;
+    margin: 1% 0 1% 2.5%;
+}
+
+#score-board-slide {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+#score-board-slide div{
+    display: flex;
+    flex-wrap: wrap;
+   justify-content: center;
+   align-items: center;
+}
+
+.score-board-names,
+.score-board-scores {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: right;
+    padding: 0;
+    margin: 0 50px 0 50px ;
+}
+
 .score-board-name-element, 
 .score-board-score-element {
     display: flex;
+    margin: 5px 0 5px 0;
 }
 
-.correct-answer {
-    display: none;
-}
-
+.correct-answer,
 .user-element {
     display: none;
 }

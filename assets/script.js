@@ -107,6 +107,8 @@ function countdown() {
 function presentQuestions(counter) {
     if (counter < questions.length) {
 
+    questionSlide.className = "question-slide-index";
+
     // QUESTION ELEMENT
     var questionEl = document.createElement("div");
     questionEl.className = "question-element";
@@ -162,10 +164,17 @@ function presentQuestions(counter) {
 // RESPONSE HANDELER
 var responseHandler = function(event) {
     event.preventDefault();
+
+    // PULL RESPONSE SELECTION AND CORRECT ANSWER 
     var response = event.target.textContent;
     var correctAnswer = localStorage.getItem("answer");
+
+    // REMOVE LAST QUESTION FROM DISPLAY
+    var lastQuestion = $(".question-element")[counter];
+    $(".question-slide-index").find(lastQuestion).css("display", "none");
+
+    // CHECK ACCURACY OF RESPONSE
     if ((response === correctAnswer) && (event.target.className == "button")) {
-        
         // UPDATE SCORE
         totalScore++;
         console.log(totalScore);
@@ -195,10 +204,15 @@ var createUserEl = function(userDataObj) {
 // END QUIZ
 var endQuiz = function() {
     // CREATE HEADING
-    var scoreBoardHeading = document.createElement("h1");
+    var scoreBoardHeading = document.createElement("h3");
     scoreBoardHeading.className = "score-board-heading";
-    scoreBoardHeading.textContent = "SCORE BOARD";
+    scoreBoardHeading.textContent = "score board";
     scoreBoardSlide.appendChild(scoreBoardHeading);
+
+    // CREATE NAME + SCORE CONTAINER
+    var nameScoreContainer = document.createElement("div");
+    nameScoreContainer.classNAme = "name-score-container";
+
     // CREATE NAME LIST
     var scoreBoardNames = document.createElement("ul");
     scoreBoardNames.className = "score-board-names";
@@ -248,8 +262,9 @@ var endQuiz = function() {
             // LINK ELEMENTS
             scoreBoardNames.appendChild(userFromStorage); 
             scoreBoardScores.appendChild(scoreFromStorage);
-            scoreBoardSlide.appendChild(scoreBoardNames);
-            scoreBoardSlide.appendChild(scoreBoardScores);
+            nameScoreContainer.appendChild(scoreBoardNames);
+            nameScoreContainer.appendChild(scoreBoardScores);
+            scoreBoardSlide.appendChild(nameScoreContainer);
         }
     }
     
