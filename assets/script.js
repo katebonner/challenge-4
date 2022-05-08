@@ -1,6 +1,7 @@
-var score = 0;
 var oneSecond = 1000;
-var counter = 0
+var totalSeconds = 60;
+var counter = 0;
+var totalScore = 0;
 
 var userInputPrompt = document.getElementById("username-request-element")
 var questionSlide = document.getElementById("questionSlide");
@@ -18,7 +19,7 @@ var question1 = {
 
 var question2 = {
     prompt: "in which section do we place the javascript ?",
-    a: "<heade>",
+    a: "<head>",
     b: "<body>",
     c: "both",
     d: "neither",
@@ -77,22 +78,24 @@ var submitUsername = function(event) {
 
     createUserEl(userDataObj);
     countdown();
+    document.getElementById("form").style.display = "none";
     presentQuestions(counter);
 }
 
 
 //COUNTDOWN
 function countdown() {
-    var totalSeconds = 60;
     var timerEl = document.getElementById("countdown");
     var timeInterval = setInterval( function() {
-        timerEl.textContent = totalSeconds;
+    timerEl.textContent = totalSeconds;
 
         if (totalSeconds > 0)
             totalSeconds--;
 
         if (totalSeconds < 0) {
             clearInterval(timeInterval);
+            document.getElementById("questionSlide").style.display = "none";
+            document.getElementById("countdown").style.display = "none";
             endQuiz()
         }
     }, oneSecond)
@@ -101,7 +104,7 @@ function countdown() {
 
 
 // PRESENT QUESTIONS
-function presentQuestions(qIndex) {
+function presentQuestions(counter) {
     if (counter < questions.length) {
 
     // QUESTION ELEMENT
@@ -110,40 +113,37 @@ function presentQuestions(qIndex) {
 
     // QUESTION PROMPT
     var questionPrompt = document.createElement("h2");
-    questionPrompt.textContent = questions[qIndex].prompt;
+    questionPrompt.textContent = questions[counter].prompt;
     questionPrompt.className = "question-prompt"
     questionEl.appendChild(questionPrompt);
 
     // SELECTION A BUTTON
     var selectionA = document.createElement("button");
-    selectionA.textContent = questions[qIndex].a;
+    selectionA.textContent = questions[counter].a;
     selectionA.className = "button";
     questionEl.appendChild(selectionA);
 
     // SELECTION B BUTTON
     var selectionB = document.createElement("button");
-    selectionB.textContent = questions[qIndex].b;
+    selectionB.textContent = questions[counter].b;
     selectionB.className = "button";
     questionEl.appendChild(selectionB);
 
     // SELECTION C BUTTON
     var selectionC = document.createElement("button");
-    selectionC.textContent = questions[qIndex].c;
+    selectionC.textContent = questions[counter].c;
     selectionC.className = "button";
     questionEl.appendChild(selectionC);
 
     // SELECTION D BUTTON
     var selectionD = document.createElement("button");
-    selectionD.textContent = questions[qIndex].d;  
+    selectionD.textContent = questions[counter].d;  
     selectionD.className = "button";  
     questionEl.appendChild(selectionD); 
 
     // ANSWER
-    var correctAnswer = document.createElement("div");
-    correctAnswer.textContent = questions[qIndex].answer;
-    correctAnswer.className = "correct-answer";
-    correctAnswer.setAttribute("data-correct", questions[qIndex].answer);
-    questionEl.appendChild(correctAnswer);
+    var answer = questions[counter].answer;
+    localStorage.setItem("answer", answer);
 
     // APPEND TO HTML LINKED SECTION
     questionSlide.appendChild(questionEl);
@@ -153,6 +153,8 @@ function presentQuestions(qIndex) {
 
     }
     else {
+        document.getElementById("questionSlide").style.display = "none";
+        document.getElementById("countdown").style.display = "none";
         endQuiz();
     }
 }
@@ -161,20 +163,26 @@ function presentQuestions(qIndex) {
 var responseHandler = function(event) {
     event.preventDefault();
     var response = event.target.textContent;
-    var correctAnswerEl = $(".correct-answer").attr("data-correct");
-    if (response === correctAnswerEl) {
-        score++;
-        return score;
+    var correctAnswer = localStorage.getItem("answer");
+    if ((response === correctAnswer) && (event.target.className == "button")) {
+        
+        // UPDATE SCORE
+        totalScore++;
+        console.log(totalScore);
+        counter++;
+        presentQuestions(counter)
     }
-    else {
-        // decrement totalSeconds in countdown()
+    else if (((response != correctAnswer) && (event.target.className == "button"))){
+        // UPDATE TIME
+        totalSeconds = totalSeconds - 10;
+        counter++;
+        presentQuestions(counter)
+        
     }
-    counter++
-    presentQuestions(counter)
 }
 
 // CREATE USER ELEMENT
-var createUserEl = function(userDataObj){
+var createUserEl = function(userDataObj) {
   
     var userEl = document.createElement("div")
     userEl.className = "user-element";
@@ -183,26 +191,43 @@ var createUserEl = function(userDataObj){
     document.body.appendChild(userEl);
 }
 
+
 // END QUIZ
 var endQuiz = function() {
+    // CREATE HEADING
+    var scoreBoardHeading = document.createElement("h1");
+    scoreBoardHeading.className = "score-board-heading";
+    scoreBoardHeading.textContent = "SCORE BOARD";
+    scoreBoardSlide.appendChild(scoreBoardHeading);
+    // CREATE NAME LIST
+    var scoreBoardNames = document.createElement("ul");
+    scoreBoardNames.className = "score-board-names";
+    // CREAT SCORE LIST
+    var scoreBoardScores = document.createElement("ul");
+    scoreBoardScores.className = "score-board-scores";
     
     var newUserObj = {
         name: $(".user-element").attr("data-name"),
-        score: $(".user-element").attr("data-score"),
+        score: totalScore
     }
 
     // IF FIRST USER DATA OBJECT
-    if (typeof(localStorage.getItem("users") === 'null')) {
+    if (!("users" in localStorage)) {
 
         // STORE THE FIRST USER DATA OBJECT LOCALLY
         users.push(newUserObj);
         localStorage.setItem("users", JSON.stringify(users));
-    
+
+        //GET USER DATA OBJECTS FROM LOCAL STORAGE
+        var usersStringArray = localStorage.getItem("users");
+        var usersFromLocalStorage = JSON.parse(usersStringArray);
+        return 0;   
     }
-
+    
+    
     // IF NOT FIRST USER DATA OBJECT
-    if (localStorage.getItem("users")) {
-
+    if (localStorage.getItem("users") != 'null') {
+    
         //GET PREVIOUS USER DATA OBJECTS FROM LOCAL STORAGE
         var usersStringArray = localStorage.getItem("users");
         var usersFromLocalStorage = JSON.parse(usersStringArray);
@@ -212,15 +237,6 @@ var endQuiz = function() {
         localStorage.setItem("users", JSON.stringify(usersFromLocalStorage));
 
         for (i = 0 ; i < usersFromLocalStorage.length ; i++){
-            // // CREATE SCORE BOARD DIV
-            // var scoreBoard = document.createElement("div");
-            // scoreBoard.className = "score-board";
-            // CREATE NAME LIST
-            var scoreBoardNames = document.createElement("ul");
-            scoreBoardNames.className = "score-board-names";
-            // CREAT SCORE LIST
-            var scoreBoardScores = document.createElement("ul");
-            scoreBoardScores.className = "score-board-scores";
             // CREATE NAME LIST ELEMENT
             var userFromStorage = document.createElement("li");
             userFromStorage.textContent = usersFromLocalStorage[i].name;
@@ -236,7 +252,9 @@ var endQuiz = function() {
             scoreBoardSlide.appendChild(scoreBoardScores);
         }
     }
+    
 }
+
 
 // CALL FUNCTIONS
 document.addEventListener("submit", submitUsername);
