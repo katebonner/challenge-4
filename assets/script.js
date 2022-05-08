@@ -92,7 +92,7 @@ function countdown() {
         if (totalSeconds > 0)
             totalSeconds--;
 
-        if (totalSeconds < 0) {
+        if (totalSeconds <= 0) {
             clearInterval(timeInterval);
             document.getElementById("questionSlide").style.display = "none";
             document.getElementById("countdown").style.display = "none";
