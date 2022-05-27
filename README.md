@@ -8,7 +8,7 @@ This project is a timed coding quiz formatted into 5 multiple-choice questions. 
 
 
 **Copied here is a link to the deployed application:**
-(https://katebonner.github.io/challenge-4/)
+(https://katebonner.github.io/timed-multiple-choice-quiz/)
 
 
 ## Table of Contents 
@@ -33,7 +33,7 @@ cd <directory-name>
 ```
 Clone this repository.
 ```md
-git clone git@github.com:katebonner/challenge-4.git
+git clone git@github.com:katebonner/timed-multiple-choice-quiz.git
 ```
 Open the directory you have just created in your code editor of choice either manually or via:
 ```md
